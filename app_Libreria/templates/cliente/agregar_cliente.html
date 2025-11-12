@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <h2>👥 Agregar Cliente</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Nombre completo *</label>
+                    <input type="text" class="form-control" name="nombre" required 
+                           placeholder="Ej: Juan Pérez García">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-control" name="email" required
+                           placeholder="cliente@email.com">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" name="telefono"
+                           placeholder="+52 123 456 7890">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Tipo de cliente *</label>
+                    <select class="form-select" name="tipo_cliente" required>
+                        <option value="REG">Regular</option>
+                        <option value="VIP">VIP</option>
+                        <option value="EMP">Empresarial</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Dirección</label>
+                    <textarea class="form-control" name="direccion" rows="3"
+                              placeholder="Calle, número, colonia, ciudad, estado..."></textarea>
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" name="activo" id="activo" checked>
+                    <label class="form-check-label" for="activo">Cliente activo</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'ver_clientes' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+            <button type="submit" class="btn btn-success">Guardar Cliente</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

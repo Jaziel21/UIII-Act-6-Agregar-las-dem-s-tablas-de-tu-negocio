@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>✏️ Actualizar Detalle de Venta</h2>
+        <a href="{% url 'ver_detalles_venta' detalle.venta.id %}" class="btn btn-outline-secondary">
+            ↩️ Volver a Detalles
+        </a>
+    </div>
+    
+    {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+    
+    <!-- Información del detalle -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Información del Detalle</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Venta:</strong> #{{ detalle.venta.id }}</p>
+                    <p><strong>Cliente:</strong> {{ detalle.venta.cliente.nombre }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Subtotal Actual:</strong> ${{ detalle.subtotal }}</p>
+                    <p><strong>Total Venta:</strong> ${{ detalle.venta.total }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">Actualizar Detalle</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'realizar_actualizacion_detalle_venta' detalle.id %}">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Libro *</label>
+                            <select class="form-select" name="libro" required>
+                                {% for libro in libros %}
+                                    <option value="{{ libro.id }}" 
+                                        {% if libro.id == detalle.libro.id %}selected{% endif %}
+                                        data-precio="{{ libro.precio }}">
+                                        {{ libro.titulo }} - Stock: {{ libro.stock }} - ${{ libro.precio }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Cantidad *</label>
+                            <input type="number" class="form-control" name="cantidad" 
+                                   value="{{ detalle.cantidad }}" min="1" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Precio Unitario *</label>
+                            <input type="number" step="0.01" class="form-control" name="precio_unitario" 
+                                   value="{{ detalle.precio_unitario }}" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3 p-3 bg-light rounded">
+                    <h6>Información Actual:</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Libro Actual:</strong> {{ detalle.libro.titulo }}<br>
+                            <strong>Autor:</strong> {{ detalle.libro.autor.nombre }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Stock Actual:</strong> {{ detalle.libro.stock }}<br>
+                            <strong>Nuevo Subtotal:</strong> $<span id="nuevo-subtotal">0.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'ver_detalles_venta' detalle.venta.id %}" class="btn btn-secondary me-md-2">Cancelar</a>
+                    <button type="submit" class="btn btn-warning">Actualizar Detalle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-completar precio y calcular subtotal
+    function calcularSubtotal() {
+        const cantidad = document.querySelector('input[name="cantidad"]').value;
+        const precio = document.querySelector('input[name="precio_unitario"]').value;
+        const subtotal = (cantidad * precio).toFixed(2);
+        document.getElementById('nuevo-subtotal').textContent = subtotal;
+    }
+    
+    document.querySelector('select[name="libro"]').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const precio = selectedOption.getAttribute('data-precio');
+        if (precio) {
+            document.querySelector('input[name="precio_unitario"]').value = precio;
+            calcularSubtotal();
+        }
+    });
+    
+    document.querySelector('input[name="cantidad"]').addEventListener('input', calcularSubtotal);
+    document.querySelector('input[name="precio_unitario"]').addEventListener('input', calcularSubtotal);
+    
+    // Calcular subtotal inicial
+    calcularSubtotal();
+</script>
+{% endblock %}

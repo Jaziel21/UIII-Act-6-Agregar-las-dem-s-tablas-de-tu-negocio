@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🧾 Detalles de Venta #{{ venta.id }}</h2>
+        <div>
+            <a href="{% url 'agregar_detalle_venta' venta.id %}" class="btn btn-success me-2">
+                ➕ Agregar Detalle
+            </a>
+            <a href="{% url 'ver_ventas' %}" class="btn btn-outline-secondary">
+                ↩️ Volver a Ventas
+            </a>
+        </div>
+    </div>
+    
+    <!-- Información de la venta -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Información de la Venta</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Cliente:</strong> {{ venta.cliente.nombre }}</p>
+                    <p><strong>Email:</strong> {{ venta.cliente.email }}</p>
+                    <p><strong>Tipo de cliente:</strong> 
+                        {% if venta.cliente.tipo_cliente == 'VIP' %}
+                            <span class="badge bg-warning text-dark">VIP</span>
+                        {% elif venta.cliente.tipo_cliente == 'EMP' %}
+                            <span class="badge bg-info">Empresarial</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Regular</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Fecha de venta:</strong> {{ venta.fecha_venta|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Estado:</strong> 
+                        {% if venta.estado == 'COM' %}
+                            <span class="badge bg-success">Completada</span>
+                        {% elif venta.estado == 'PEN' %}
+                            <span class="badge bg-warning text-dark">Pendiente</span>
+                        {% elif venta.estado == 'CAN' %}
+                            <span class="badge bg-danger">Cancelada</span>
+                        {% elif venta.estado == 'DEV' %}
+                            <span class="badge bg-info">Devuelta</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>Total de la venta:</strong> 
+                        <span class="h5 text-success">${{ venta.total }}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detalles de los libros vendidos -->
+    <div class="card">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Libros Vendidos ({{ detalles.count }})</h5>
+            <a href="{% url 'agregar_detalle_venta' venta.id %}" class="btn btn-success btn-sm">
+                ➕ Agregar Detalle
+            </a>
+        </div>
+        <div class="card-body">
+            {% if detalles %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Libro</th>
+                            <th>Autor</th>
+                            <th>Editorial</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detalle in detalles %}
+                        <tr>
+                            <td>
+                                <strong>{{ detalle.libro.titulo }}</strong>
+                                <br>
+                                <small class="text-muted">ISBN: {{ detalle.libro.isbn }}</small>
+                            </td>
+                            <td>
+                                <strong>{{ detalle.libro.autor.nombre }}</strong>
+                                <br>
+                                <small class="text-muted">{{ detalle.libro.autor.nacionalidad }}</small>
+                            </td>
+                            <td>
+                                {{ detalle.libro.editorial.nombre }}
+                                <br>
+                                <small class="text-muted">{{ detalle.libro.editorial.pais }}</small>
+                            </td>
+                            <td>{{ detalle.cantidad }}</td>
+                            <td>${{ detalle.precio_unitario }}</td>
+                            <td><strong>${{ detalle.subtotal }}</strong></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'actualizar_detalle_venta' detalle.id %}" class="btn btn-warning">Editar</a>
+                                    <a href="{% url 'borrar_detalle_venta' detalle.id %}" class="btn btn-danger">Borrar</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="table-dark">
+                        <tr>
+                            <td colspan="5" class="text-end"><strong>Total:</strong></td>
+                            <td><strong>${{ venta.total }}</strong></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center text-muted py-4">
+                <p>No hay detalles registrados para esta venta.</p>
+                <a href="{% url 'agregar_detalle_venta' venta.id %}" class="btn btn-primary mt-2">
+                    ➕ Agregar Primer Detalle
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

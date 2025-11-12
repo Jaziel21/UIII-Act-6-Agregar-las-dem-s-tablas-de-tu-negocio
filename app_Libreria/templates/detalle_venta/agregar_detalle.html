@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>➕ Agregar Detalle a Venta #{{ venta.id }}</h2>
+        <a href="{% url 'ver_detalles_venta' venta.id %}" class="btn btn-outline-secondary">
+            ↩️ Volver a Detalles
+        </a>
+    </div>
+    
+    {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+    
+    <!-- Información de la venta -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Información de la Venta</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Cliente:</strong> {{ venta.cliente.nombre }}</p>
+                    <p><strong>Email:</strong> {{ venta.cliente.email }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Total Actual:</strong> ${{ venta.total }}</p>
+                    <p><strong>Estado:</strong> 
+                        {% if venta.estado == 'COM' %}
+                            <span class="badge bg-success">Completada</span>
+                        {% elif venta.estado == 'PEN' %}
+                            <span class="badge bg-warning text-dark">Pendiente</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Agregar Libro a la Venta</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Libro *</label>
+                            <select class="form-select" name="libro" required>
+                                <option value="">Seleccionar libro...</option>
+                                {% for libro in libros %}
+                                    <option value="{{ libro.id }}" data-precio="{{ libro.precio }}">
+                                        {{ libro.titulo }} - Stock: {{ libro.stock }} - ${{ libro.precio }}
+                                    </option>
+                                {% empty %}
+                                    <option value="">No hay libros disponibles</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Cantidad *</label>
+                            <input type="number" class="form-control" name="cantidad" min="1" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Precio Unitario *</label>
+                            <input type="number" step="0.01" class="form-control" name="precio_unitario" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'ver_detalles_venta' venta.id %}" class="btn btn-secondary me-md-2">Cancelar</a>
+                    <button type="submit" class="btn btn-success">Agregar a Venta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-completar precio cuando se selecciona un libro
+    document.querySelector('select[name="libro"]').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const precio = selectedOption.getAttribute('data-precio');
+        if (precio) {
+            document.querySelector('input[name="precio_unitario"]').value = precio;
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Ventas - Librería AJMG</title>
+</head>
+<body>
+    <h1>Ventas Realizadas</h1>
+    <table border="1">
+        <tr>
+            <th>Cliente</th>
+            <th>Libro</th>
+            <th>Cantidad</th>
+            <th>Fecha de Venta</th>
+            <th>Total</th>
+        </tr>
+        {% for venta in ventas %}
+        <tr>
+            <td>{{ venta.cliente.nombre }}</td>
+            <td>{{ venta.libro.titulo }}</td>
+            <td>{{ venta.cantidad }}</td>
+            <td>{{ venta.fecha_venta }}</td>
+            <td>{{ venta.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="/">Volver al inicio</a>
+</body>
+</html>

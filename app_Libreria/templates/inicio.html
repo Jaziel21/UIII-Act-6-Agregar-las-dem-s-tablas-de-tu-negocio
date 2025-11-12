@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Inicio - Libreria AJMG{% endblock %}
+{% block content %}
+  <div class="soft-card p-4">
+    <h1>{{ titulo }}</h1>
+    <p>Bienvenido al sistema de administración de la librería AJMG 1194.</p>
+    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" class="img-fluid rounded" alt="Librería">
+    <ul>
+        <li><a href="/libros/">Ver lista de libros</a></li>
+        <li><a href="/clientes/">Ver lista de clientes</a></li>
+        <li><a href="/ventas/">Ver lista de ventas</a></li>
+    </ul>
+  </div>
+{% endblock %}

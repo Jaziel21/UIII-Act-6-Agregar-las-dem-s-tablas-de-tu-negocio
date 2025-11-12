@@ -1,0 +1,69 @@
+<!-- templates/autor/actualizar_autor.html - MEJORADO -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <h2>Actualizar Autor</h2>
+    
+    <form method="post" action="{% url 'realizar_actualizacion_autor' autor.id %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Nombre completo *</label>
+                    <input type="text" class="form-control" name="nombre" value="{{ autor.nombre }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Nacionalidad *</label>
+                    <input type="text" class="form-control" name="nacionalidad" value="{{ autor.nacionalidad }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Fecha de nacimiento *</label>
+                    <input type="date" class="form-control" name="fecha_nacimiento" 
+                           value="{{ autor.fecha_nacimiento|date:'Y-m-d' }}" required>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Fecha de fallecimiento</label>
+                    <input type="date" class="form-control" name="fecha_fallecimiento" 
+                           value="{{ autor.fecha_fallecimiento|date:'Y-m-d' }}">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Email de contacto</label>
+                    <input type="email" class="form-control" name="email" value="{{ autor.email }}">
+                </div>
+                
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" name="activo" id="activo" 
+                           {% if autor.activo %}checked{% endif %}>
+                    <label class="form-check-label" for="activo">Autor activo</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Biografía</label>
+            <textarea class="form-control" name="biografia" rows="4">{{ autor.biografia }}</textarea>
+        </div>
+        
+        <div class="mb-3">
+            <small class="text-muted">
+                <strong>Información del sistema:</strong><br>
+                Creado: {{ autor.created_at|date:"d/m/Y H:i" }}<br>
+                Última actualización: {{ autor.updated_at|date:"d/m/Y H:i" }}
+            </small>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'ver_autores' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+            <button type="submit" class="btn btn-warning">Actualizar Autor</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+<!-- templates/autor/agregar_autor.html - MEJORADO -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <h2>Agregar Autor</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Nombre completo *</label>
+                    <input type="text" class="form-control" name="nombre" required 
+                           placeholder="Ej: Gabriel García Márquez">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Nacionalidad *</label>
+                    <input type="text" class="form-control" name="nacionalidad" required
+                           placeholder="Ej: Colombiano">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Fecha de nacimiento *</label>
+                    <input type="date" class="form-control" name="fecha_nacimiento" required>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Fecha de fallecimiento</label>
+                    <input type="date" class="form-control" name="fecha_fallecimiento">
+                    <small class="text-muted">Dejar vacío si el autor está vivo</small>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Email de contacto</label>
+                    <input type="email" class="form-control" name="email" 
+                           placeholder="ejemplo@email.com">
+                </div>
+                
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" name="activo" id="activo" checked>
+                    <label class="form-check-label" for="activo">Autor activo</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Biografía</label>
+            <textarea class="form-control" name="biografia" rows="4" 
+                      placeholder="Breve biografía del autor..."></textarea>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'ver_autores' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+            <button type="submit" class="btn btn-success">Guardar Autor</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

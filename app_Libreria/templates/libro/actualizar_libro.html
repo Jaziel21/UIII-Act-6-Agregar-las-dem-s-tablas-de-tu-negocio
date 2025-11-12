@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Actualizar Libro - Librería AJMG{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-warning">✏️ Actualizar Libro</h2>
+    
+    {% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+    
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST" action="{% url 'realizar_actualizacion_libro' libro.id %}">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Título del Libro</label>
+                            <input type="text" class="form-control" name="titulo" value="{{ libro.titulo }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">ISBN</label>
+                            <input type="text" class="form-control" name="isbn" value="{{ libro.isbn }}" maxlength="13" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Género</label>
+                            <select class="form-select" name="genero" required>
+                                {% for codigo, nombre in generos %}
+                                    <option value="{{ codigo }}" {% if libro.genero == codigo %}selected{% endif %}>
+                                        {{ nombre }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Autor *</label>
+                            <select class="form-select" name="autor" required>
+                                {% for autor in autores %}
+                                    <option value="{{ autor.id }}" {% if libro.autor.id == autor.id %}selected{% endif %}>
+                                        {{ autor.nombre }} - {{ autor.nacionalidad }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Fecha de Publicación</label>
+                            <input type="date" class="form-control" name="fecha_publicacion" 
+                                   value="{{ libro.fecha_publicacion|date:'Y-m-d' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Precio</label>
+                            <input type="number" step="0.01" class="form-control" name="precio" 
+                                   value="{{ libro.precio }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Stock</label>
+                            <input type="number" class="form-control" name="stock" value="{{ libro.stock }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Editorial *</label>
+                            <select class="form-select" name="editorial" required>
+                                {% for editorial in editoriales %}
+                                    <option value="{{ editorial.id }}" {% if libro.editorial.id == editorial.id %}selected{% endif %}>
+                                        {{ editorial.nombre }} - {{ editorial.pais }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Descripción</label>
+                    <textarea class="form-control" name="descripcion" rows="3">{{ libro.descripcion }}</textarea>
+                </div>
+
+                <div class="mb-3 p-3 bg-light rounded">
+                    <h6>Información del Libro:</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Autor Actual:</strong> {{ libro.autor.nombre }}<br>
+                            <strong>Editorial Actual:</strong> {{ libro.editorial.nombre }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Disponibilidad:</strong> 
+                            {% if libro.disponible %}
+                                <span class="badge bg-success">Disponible</span>
+                            {% else %}
+                                <span class="badge bg-danger">Agotado</span>
+                            {% endif %}
+                            <br>
+                            <strong>Publicado:</strong> {{ libro.fecha_publicacion|date:"d/m/Y" }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{% url 'ver_libros' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+                    <button type="submit" class="btn btn-warning">Actualizar Libro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

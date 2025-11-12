@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Confirmar borrado</h2>
+<p>¿Eliminar al autor <strong>{{ autor.nombre }}</strong>?</p>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger">Sí, borrar</button>
+  <a class="btn btn-secondary" href="{% url 'ver_autores' %}">Cancelar</a>
+</form>
+{% endblock %}

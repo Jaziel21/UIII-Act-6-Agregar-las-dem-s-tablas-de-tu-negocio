@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">🗑️ Confirmar Eliminación</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="alert alert-warning">
+                        <h5>¿Estás seguro de que deseas eliminar este cliente?</h5>
+                        <p class="mb-2"><strong>{{ cliente.nombre }}</strong></p>
+                        <p class="mb-1"><strong>Email:</strong> {{ cliente.email }}</p>
+                        <p class="mb-1"><strong>Tipo:</strong> 
+                            {% if cliente.tipo_cliente == 'VIP' %}
+                                <span class="badge bg-warning text-dark">VIP</span>
+                            {% elif cliente.tipo_cliente == 'EMP' %}
+                                <span class="badge bg-info">Empresarial</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Regular</span>
+                            {% endif %}
+                        </p>
+                        <p class="mb-1"><strong>Ventas realizadas:</strong> {{ cliente.ventas.count }}</p>
+                        <p class="text-muted mt-2">
+                            <small>
+                                ⚠️ Este cliente tiene {{ cliente.ventas.count }} ventas asociadas. 
+                                Si lo eliminas, estas ventas quedarán sin cliente.
+                            </small>
+                        </p>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a href="{% url 'ver_clientes' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-danger">Sí, Eliminar Cliente</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

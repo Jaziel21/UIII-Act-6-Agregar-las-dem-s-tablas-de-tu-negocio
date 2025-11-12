@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Borrar Libro - Librería AJMG{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">🗑️ Confirmar Eliminación</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="alert alert-warning">
+                        <h5>¿Estás seguro de que deseas eliminar este libro?</h5>
+                        <p class="mb-2"><strong>{{ libro.titulo }}</strong></p>
+                        <p class="text-muted">ISBN: {{ libro.isbn }}</p>
+                        <p class="mb-1"><strong>Autor:</strong> {{ libro.autor.nombre }}</p>
+                        <p class="mb-1"><strong>Editorial:</strong> {{ libro.editorial.nombre }}</p>
+                        <p class="text-muted mt-2">
+                            <small>
+                                ⚠️ Esta acción no se puede deshacer.
+                            </small>
+                        </p>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a href="{% url 'ver_libros' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-danger">Sí, Eliminar Libro</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

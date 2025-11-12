@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <h2>✏️ Actualizar Editorial</h2>
+    
+    <form method="post" action="{% url 'realizar_actualizacion_editorial' editorial.id %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Nombre de la editorial *</label>
+                    <input type="text" class="form-control" name="nombre" value="{{ editorial.nombre }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">País de origen *</label>
+                    <input type="text" class="form-control" name="pais" value="{{ editorial.pais }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Año de fundación</label>
+                    <input type="number" class="form-control" name="fundacion" 
+                           value="{{ editorial.fundacion }}" min="1500" max="2024">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Sitio web</label>
+                    <input type="url" class="form-control" name="sitio_web" value="{{ editorial.sitio_web }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email de contacto</label>
+                    <input type="email" class="form-control" name="email" value="{{ editorial.email }}">
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" name="activo" id="activo" 
+                           {% if editorial.activo %}checked{% endif %}>
+                    <label class="form-check-label" for="activo">Editorial activa</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3 p-3 bg-light rounded">
+            <h6>Información del sistema:</h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Creada:</strong> {{ editorial.created_at|date:"d/m/Y H:i" }}<br>
+                    <strong>Actualizada:</strong> {{ editorial.updated_at|date:"d/m/Y H:i" }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Libros publicados:</strong> {{ editorial.libros.count }}<br>
+                    <strong>Estado:</strong> 
+                    <span class="badge {% if editorial.activo %}bg-success{% else %}bg-danger{% endif %}">
+                        {{ editorial.activo|yesno:"Activa,Inactiva" }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'ver_editoriales' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+            <button type="submit" class="btn btn-warning">Actualizar Editorial</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

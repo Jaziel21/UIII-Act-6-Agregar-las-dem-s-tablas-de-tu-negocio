@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">🗑️ Confirmar Eliminación</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="alert alert-warning">
+                        <h5>¿Estás seguro de que deseas eliminar este detalle?</h5>
+                        <p class="mb-2"><strong>Detalle #{{ detalle.id }}</strong></p>
+                        <p class="mb-1"><strong>Libro:</strong> {{ detalle.libro.titulo }}</p>
+                        <p class="mb-1"><strong>Cantidad:</strong> {{ detalle.cantidad }}</p>
+                        <p class="mb-1"><strong>Precio Unitario:</strong> ${{ detalle.precio_unitario }}</p>
+                        <p class="mb-1"><strong>Subtotal:</strong> ${{ detalle.subtotal }}</p>
+                        <p class="text-muted mt-2">
+                            <small>
+                                ⚠️ Al eliminar este detalle, se restaurarán {{ detalle.cantidad }} unidades al stock del libro 
+                                "{{ detalle.libro.titulo }}".
+                            </small>
+                        </p>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a href="{% url 'ver_detalles_venta' detalle.venta.id %}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-danger">Sí, Eliminar Detalle</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

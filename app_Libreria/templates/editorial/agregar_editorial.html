@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <h2>🏢 Agregar Editorial</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Nombre de la editorial *</label>
+                    <input type="text" class="form-control" name="nombre" required 
+                           placeholder="Ej: Penguin Random House">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">País de origen *</label>
+                    <input type="text" class="form-control" name="pais" required
+                           placeholder="Ej: Estados Unidos">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Año de fundación</label>
+                    <input type="number" class="form-control" name="fundacion" 
+                           min="1500" max="2024" placeholder="Ej: 2013">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Sitio web</label>
+                    <input type="url" class="form-control" name="sitio_web"
+                           placeholder="https://ejemplo.com">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email de contacto</label>
+                    <input type="email" class="form-control" name="email"
+                           placeholder="contacto@editorial.com">
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" name="activo" id="activo" checked>
+                    <label class="form-check-label" for="activo">Editorial activa</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'ver_editoriales' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+            <button type="submit" class="btn btn-success">Guardar Editorial</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

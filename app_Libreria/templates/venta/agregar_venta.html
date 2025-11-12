@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="soft-card p-4">
+    <h2>💰 Agregar Venta</h2>
+    
+    {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Cliente *</label>
+                    <select class="form-select" name="cliente" required>
+                        <option value="">Seleccionar cliente...</option>
+                        {% for cliente in clientes %}
+                            <option value="{{ cliente.id }}">
+                                {{ cliente.nombre }} - {{ cliente.email }}
+                                {% if cliente.tipo_cliente == 'VIP' %}
+                                    (VIP)
+                                {% elif cliente.tipo_cliente == 'EMP' %}
+                                    (Empresarial)
+                                {% endif %}
+                            </option>
+                        {% empty %}
+                            <option value="">No hay clientes disponibles</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Estado *</label>
+                    <select class="form-select" name="estado" required>
+                        <option value="PEN">Pendiente</option>
+                        <option value="COM" selected>Completada</option>
+                        <option value="CAN">Cancelada</option>
+                        <option value="DEV">Devuelta</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <h6>💡 Información:</h6>
+            <p class="mb-0">
+                Para agregar detalles de venta (libros vendidos), actualiza la venta después de crearla.
+                Esto permite una mejor gestión del stock y los detalles de la venta.
+            </p>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'ver_ventas' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+            <button type="submit" class="btn btn-success">Registrar Venta</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
